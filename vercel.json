@@ -1,47 +1,5 @@
 {
   "buildCommand": "npm run build",
   "framework": "nextjs",
-  "installCommand": "npm install --legacy-peer-deps",
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": {
-      "description": "Your Supabase project URL",
-      "required": true
-    },
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": {
-      "description": "Your Supabase anon/public key",
-      "required": true
-    },
-    "SUPABASE_SERVICE_ROLE_KEY": {
-      "description": "Your Supabase service role key",
-      "required": true
-    },
-    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": {
-      "description": "Your Stripe publishable key",
-      "required": true
-    },
-    "STRIPE_SECRET_KEY": {
-      "description": "Your Stripe secret key",
-      "required": true
-    },
-    "STRIPE_WEBHOOK_SECRET": {
-      "description": "Your Stripe webhook signing secret",
-      "required": true
-    },
-    "RESEND_API_KEY": {
-      "description": "Your Resend API key",
-      "required": true
-    },
-    "NEXT_PUBLIC_APP_URL": {
-      "description": "Your app URL (e.g., https://presskitgen.com)",
-      "required": true
-    },
-    "NEXT_PUBLIC_APP_NAME": {
-      "description": "Your app name",
-      "value": "PresskitGen"
-    },
-    "ADMIN_EMAIL": {
-      "description": "Admin email for notifications",
-      "required": true
-    }
-  }
+  "installCommand": "npm install --legacy-peer-deps"
 }
