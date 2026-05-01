@@ -19,30 +19,35 @@ export default function LoginPage() {
     const password = String(formData.get('password') || '');
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const supabase = createClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Login failed');
+      if (signInError) {
+        setError(signInError.message);
         setIsPending(false);
         return;
       }
+      // Hard navigation so middleware sees the new cookies
       window.location.href = '/dashboard';
     } catch (err: any) {
-      setError(err.message || 'Network error');
+      setError(err?.message || 'Network error');
       setIsPending(false);
     }
   }
 
   const handleGitHubLogin = async () => {
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: 'github',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
+    if (oauthError) {
+      setError(oauthError.message);
+    }
   };
 
   return (

@@ -21,20 +21,28 @@ export default function SignupPage() {
     setError(null);
 
     try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, fullName }),
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Signup failed');
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+      // If email confirmation is required, session will be null
+      if (!data.session) {
+        setError('Check your email to confirm your account, then log in.');
         setLoading(false);
         return;
       }
       window.location.href = '/dashboard';
     } catch (err: any) {
-      setError(err.message || 'Network error');
+      setError(err?.message || 'Network error');
       setLoading(false);
     }
   };
