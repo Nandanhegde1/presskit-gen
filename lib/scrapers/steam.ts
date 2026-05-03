@@ -2,7 +2,7 @@
 // Steam store pages are public; scraping for personal/owner reuse is permitted.
 
 export type ScrapedKit = {
-  source: 'steam' | 'itch';
+  source: 'steam' | 'itch' | 'spotify' | 'bandcamp';
   sourceUrl: string;
   gameName: string;
   tagline: string | null;

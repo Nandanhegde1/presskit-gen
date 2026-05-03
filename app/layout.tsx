@@ -5,13 +5,13 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PresskitGen - Professional Press Kits for Indie Game Developers",
-  description: "Create beautiful, professional press kits for your indie game in minutes. No coding required. Free to start, premium themes available.",
-  keywords: ["press kit", "game dev", "indie game", "media kit", "game press", "presskit", "game marketing"],
+  title: "PresskitGen - Press Kits for Musicians, Game Devs & Indie Creators",
+  description: "Auto-fill from Spotify, Bandcamp, Steam or itch.io. Beautiful, SEO-optimized press kits in 5 minutes. Free to start.",
+  keywords: ["press kit", "EPK", "electronic press kit", "musician press kit", "band press kit", "indie game press kit", "media kit", "presskit"],
   authors: [{ name: "PresskitGen" }],
   openGraph: {
-    title: "PresskitGen - Press Kits for Indie Developers",
-    description: "Create professional press kits in minutes",
+    title: "PresskitGen - Press Kits for Indie Creators",
+    description: "Auto-fill from Spotify, Bandcamp, Steam or itch.io. Free to start.",
     type: "website",
     url: "https://presskitgen.com",
     images: [
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "PresskitGen - Press Kits for Indie Developers",
-    description: "Create professional press kits in minutes",
+    title: "PresskitGen - Press Kits for Indie Creators",
+    description: "Auto-fill from Spotify, Bandcamp, Steam or itch.io. Free to start.",
     images: ["/og-image.png"],
   },
 };

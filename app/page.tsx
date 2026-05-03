@@ -33,12 +33,12 @@ export default function Home() {
             No coding required · Free to start
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-            Professional Press Kits<br />
-            <span className="text-indigo-600">in 5 Minutes</span>
+            Press Kits for Creators<br />
+            <span className="text-indigo-600">Auto-filled in 30 seconds</span>
           </h1>
           <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-            Every indie game needs a press kit. Stop wasting hours on design and HTML. 
-            Create a beautiful, SEO-optimized press kit that journalists actually want to use.
+            Paste your Spotify, Bandcamp, Steam, or itch.io URL — we pull your name, bio, art, and links.
+            Pick a theme, publish a beautiful press kit journalists and bookers actually use.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/signup" className="bg-indigo-600 text-white px-8 py-4 rounded-lg hover:bg-indigo-700 transition text-lg font-semibold flex items-center justify-center gap-2">
@@ -199,7 +199,7 @@ export default function Home() {
               <Sparkles className="w-6 h-6 text-indigo-600" />
               <span className="text-xl font-bold">PresskitGen</span>
             </div>
-            <p className="text-gray-600 text-sm">Press kits for indie game developers</p>
+            <p className="text-gray-600 text-sm">Press kits for musicians, game devs &amp; indie creators</p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Product</h4>

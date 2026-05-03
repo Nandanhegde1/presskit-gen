@@ -167,7 +167,7 @@ export default function EditClient({ kit }: { kit: any }) {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Press Kit</h1>
-        <p className="text-gray-600">Auto-fill from Steam/itch.io, then customize the theme.</p>
+        <p className="text-gray-600">Auto-fill from Spotify, Bandcamp, Steam or itch.io, then customize the theme.</p>
       </div>
 
       {error && (
@@ -182,17 +182,17 @@ export default function EditClient({ kit }: { kit: any }) {
       {/* IMPORT FROM URL */}
       <section className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-lg border border-indigo-200">
         <h2 className="text-xl font-bold mb-1 flex items-center gap-2 text-indigo-900">
-          <Sparkles className="w-5 h-5" /> Auto-fill from Steam or itch.io
+          <Sparkles className="w-5 h-5" /> Auto-fill from Spotify, Bandcamp, Steam or itch.io
         </h2>
         <p className="text-sm text-indigo-700 mb-4">
-          Paste your Steam store URL or itch.io game URL. We&apos;ll pull in the title, description,
+          Paste your Spotify artist, Bandcamp page, Steam store, or itch.io URL. We&apos;ll pull the name, bio, art,
           screenshots, header image, and platforms in seconds. Existing fields are preserved.
         </p>
         <div className="flex gap-2 flex-col sm:flex-row">
           <input
             value={importUrl}
             onChange={(e) => setImportUrl(e.target.value)}
-            placeholder="https://store.steampowered.com/app/... or https://yourgame.itch.io/..."
+            placeholder="https://open.spotify.com/artist/... or https://yourband.bandcamp.com or Steam/itch.io URL"
             className="flex-1 border border-indigo-300 rounded-lg px-3 py-2 bg-white"
             disabled={isImporting}
           />
@@ -356,7 +356,7 @@ export default function EditClient({ kit }: { kit: any }) {
             </div>
           ))}
           {(!kit.press_kit_links || kit.press_kit_links.length === 0) && (
-            <p className="text-sm text-gray-500">No links yet. Add Steam, itch.io, social media, etc.</p>
+            <p className="text-sm text-gray-500">No links yet. Add Spotify, Bandcamp, social media, store pages, etc.</p>
           )}
         </div>
         <div className="flex gap-2 flex-col sm:flex-row">
