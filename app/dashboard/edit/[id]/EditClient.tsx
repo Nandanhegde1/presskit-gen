@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Upload,
@@ -47,6 +47,17 @@ export default function EditClient({ kit }: { kit: any }) {
     release_date: kit.release_date || '',
     website_url: kit.website_url || '',
   });
+
+  // Re-sync form fields when kit prop changes (e.g. after Auto-fill / router.refresh)
+  useEffect(() => {
+    setInfo({
+      game_name: kit.game_name || '',
+      tagline: kit.tagline || '',
+      description: kit.description || '',
+      release_date: kit.release_date || '',
+      website_url: kit.website_url || '',
+    });
+  }, [kit.game_name, kit.tagline, kit.description, kit.release_date, kit.website_url]);
 
   const [newLink, setNewLink] = useState({ label: '', url: '' });
   const [newContact, setNewContact] = useState({ name: '', email: '', role: '' });
