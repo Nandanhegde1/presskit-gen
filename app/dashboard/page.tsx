@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient, TEST_USER_ID } from '@/lib/supabase/admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, FileText, Eye, Download, Settings, LogOut } from 'lucide-react';
+import { Plus, FileText, Eye, Download, Settings, LogOut, BarChart3 } from 'lucide-react';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -22,6 +22,38 @@ export default async function DashboardPage() {
     .select('*')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false });
+
+  // 7-day analytics across all kits owned by this user
+  const kitIds = (pressKits || []).map((k) => k.id);
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  let dailyCounts: { date: string; views: number }[] = [];
+  let totalViews7d = 0;
+  let totalDownloads7d = 0;
+  if (kitIds.length > 0) {
+    const { data: events } = await adminSupabase
+      .from('analytics_events')
+      .select('event_type, created_at')
+      .in('press_kit_id', kitIds)
+      .gte('created_at', sevenDaysAgo.toISOString());
+
+    const buckets: Record<string, number> = {};
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      buckets[d.toISOString().slice(0, 10)] = 0;
+    }
+    for (const e of events || []) {
+      if (e.event_type !== 'view') {
+        if (e.event_type === 'download' || e.event_type === 'asset_download') totalDownloads7d++;
+        continue;
+      }
+      const day = new Date(e.created_at).toISOString().slice(0, 10);
+      if (day in buckets) buckets[day] += 1;
+      totalViews7d += 1;
+    }
+    dailyCounts = Object.entries(buckets).map(([date, views]) => ({ date, views }));
+  }
+  const maxDaily = Math.max(1, ...dailyCounts.map((d) => d.views));
 
   const handleSignOut = async () => {
     'use server';
@@ -76,6 +108,41 @@ export default async function DashboardPage() {
           <Plus className="w-5 h-5" />
           Create New Press Kit
         </Link>
+
+        {/* Analytics widget */}
+        {kitIds.length > 0 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-indigo-600" /> Last 7 days
+              </h2>
+              <div className="flex gap-6 text-sm">
+                <span className="flex items-center gap-1 text-gray-600">
+                  <Eye className="w-4 h-4" /> <strong className="text-gray-900">{totalViews7d}</strong> views
+                </span>
+                <span className="flex items-center gap-1 text-gray-600">
+                  <Download className="w-4 h-4" /> <strong className="text-gray-900">{totalDownloads7d}</strong> downloads
+                </span>
+              </div>
+            </div>
+            <div className="flex items-end gap-2 h-32">
+              {dailyCounts.map((d) => (
+                <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
+                  <div className="w-full flex-1 flex items-end">
+                    <div
+                      className="w-full bg-indigo-500 rounded-t transition-all"
+                      style={{ height: `${(d.views / maxDaily) * 100}%`, minHeight: d.views > 0 ? '4px' : '0' }}
+                      title={`${d.views} views`}
+                    />
+                  </div>
+                  <span className="text-[10px] text-gray-500">
+                    {new Date(d.date).toLocaleDateString('en', { weekday: 'short' })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Press Kits Grid */}
         {pressKits && pressKits.length > 0 ? (
