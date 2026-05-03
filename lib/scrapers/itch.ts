@@ -70,17 +70,27 @@ export async function scrapeItch(url: string): Promise<ScrapedKit> {
     description = stripHtml(descMatch[1]);
   }
 
-  // Screenshots: <a class="screenshot_link" href="...png|jpg">
+  // Screenshots: <a data-image_lightbox="true" ... href="https://img.itch.zone/.../original/...png">
   const screenshotUrls: string[] = [];
-  const scRe = /<a[^>]+class=["'][^"']*screenshot[^"']*["'][^>]+href=["']([^"']+)["']/gi;
+  const seen = new Set<string>();
+  const scRe = /<a[^>]+data-image_lightbox=["']true["'][^>]+href=["']([^"']+)["']/gi;
   let scMatch: RegExpExecArray | null;
   while ((scMatch = scRe.exec(html)) !== null) {
-    screenshotUrls.push(scMatch[1]);
+    if (!seen.has(scMatch[1])) {
+      seen.add(scMatch[1]);
+      screenshotUrls.push(scMatch[1]);
+    }
   }
-  // Also try data-image attributes
-  const dataImgRe = /data-screenshot[^=]*=["']([^"']+\.(?:png|jpg|jpeg|webp|gif))["']/gi;
-  while ((scMatch = dataImgRe.exec(html)) !== null) {
-    if (!screenshotUrls.includes(scMatch[1])) screenshotUrls.push(scMatch[1]);
+  // Fallback: any img.itch.zone "original" URL
+  if (screenshotUrls.length === 0) {
+    const fallbackRe = /https:\/\/img\.itch\.zone\/[^"'\s]+\/original\/[^"'\s]+\.(?:png|jpg|jpeg|webp|gif)/gi;
+    let fm: RegExpExecArray | null;
+    while ((fm = fallbackRe.exec(html)) !== null) {
+      if (!seen.has(fm[0])) {
+        seen.add(fm[0]);
+        screenshotUrls.push(fm[0]);
+      }
+    }
   }
 
   // Platforms — itch shows OS icons via .icon classes
@@ -102,7 +112,7 @@ export async function scrapeItch(url: string): Promise<ScrapedKit> {
     platforms,
     websiteUrl: null,
     headerImageUrl,
-    screenshotUrls,
+    screenshotUrls: screenshotUrls.filter((s) => s !== headerImageUrl),
     trailerUrls: [],
     links: [{ label: 'itch.io', url }],
   };
